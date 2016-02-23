@@ -127,8 +127,10 @@ function displayMovies() {
 
   // Add click handlers
   for(ii =0; ii<movies.length; ii++) {
-    //need closure inside for loop
+    // Need closure inside for loop, otherwise the `ii` reference will not be
+    // accurate for each iteration of the loop.
     (function(ii) {
+      // We use the id that we set above - `movies[ii].imdbID`
       eleById(movies[ii].imdbID).onclick =function() {
         getMovieDetails(movies[ii].imdbID);
       };
@@ -137,14 +139,19 @@ function displayMovies() {
 }
 
 function getMovieDetails(movieId) {
-  var movie =null;
-  var ii;
-  for(ii =0; ii<movies.length; ii++) {
-    if(movieId ===movies[ii].imdbID) {
-      movie =movies[ii];
-      break;
-    }
-  }
+  // If we wanted to get more information on the movie, we could, but for this
+  // case all we need is the movie id, which we already have.
+  // // Default movie to null in case it is not found, though that should NOT happen.
+  // var movie =null;
+  // var ii;
+  // // Go through movies to match by id.
+  // for(ii =0; ii<movies.length; ii++) {
+  //   if(movieId ===movies[ii].imdbID) {
+  //     movie =movies[ii];
+  //     // If found, we are done, so break.
+  //     break;
+  //   }
+  // }
 
   // Use helper AJAX function to look up movie details
   var url ="http://www.omdbapi.com/?i=" + movieId + "&type=movie&r=json&tomatoes=true&";
@@ -156,6 +163,9 @@ function getMovieDetails(movieId) {
 
 function displayMovieDetails(info) {
   var html ="";
+  // We will iterate through the `info` object and output each key and value.
+  // Note: there may be fields (keys) we do NOT want to output to the user.
+  // We could add a `skip` array variable to skip these keys if we wanted.
   var key;
   for(key in info) {
     html += "<div>" + key + ": " + info[key] + "</div>";
