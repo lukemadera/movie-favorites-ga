@@ -37,3 +37,7 @@
 .movie-details {
   text-align: center;
 }
+.movie-favorite {
+  padding: 5px;
+  cursor: pointer;
+}

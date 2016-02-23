@@ -8,9 +8,10 @@ function eleById(id) {
 /**
 http://stackoverflow.com/questions/8567114/how-to-make-an-ajax-call-without-jquery
 */
-function ajax(url, type, callback) {
+function ajax(url, type, data, callback) {
   console.log('ajax call starting');
   var type = type || 'GET';
+  var data = data || null;
 
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.onreadystatechange = function() {
@@ -25,5 +26,8 @@ function ajax(url, type, callback) {
     }
   }
   xmlhttp.open(type, url, true);
-  xmlhttp.send();
+  if(type ==="POST") {
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  }
+  xmlhttp.send(data);
 }

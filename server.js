@@ -17,13 +17,26 @@ app.get('/favorites', function(req, res) {
 
 // Update favorites by inserting a new one.
 app.post('/favorites', function(req, res) {
-  if(!req.body.name || !req.body.oid) {
-    res.send("Error");
+  if(!req.body.imdbID || !req.body.Title) {
+    res.send([]);
     return;
   }
+  var body =req.body;
   
   var data = JSON.parse(fs.readFileSync('./data.json'));
-  data.push(req.body);
+
+  // Check if favorite already exists.
+  // var exists =false;
+  var ii;
+  for(ii =0; ii<data.length; ii++) {
+    if(data[ii].imdbID ===body.imdbID) {
+      // exists =true;
+      res.send([]);
+      return;
+    }
+  }
+
+  data.push(body);
   fs.writeFile('./data.json', JSON.stringify(data));
   res.setHeader('Content-Type', 'application/json');
   res.send(data);

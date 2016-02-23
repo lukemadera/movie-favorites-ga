@@ -4,7 +4,8 @@ var movies =[
   {
     imbdID: 'movieId1',
     Title: 'title 1',
-    Poster: 'http://image.jpg'
+    Poster: 'http://image.jpg',
+    favorite: false
   }
 ];
 
@@ -75,7 +76,7 @@ function searchMovies(searchText) {
   // That means it does NOT return immediately. Instead, the 3rd parameter
   // we pass is a function, which will be called when the data is ready.
   // This is commonly called a `callback` function.
-  ajax(url, "GET", function(response) {
+  ajax(url, "GET", null, function(response) {
     // Now we have new movies, so update our local `movies` variable.
     setMovies(response);
     // Now that we have added in the new movie data, display them.
@@ -100,7 +101,12 @@ function setMovies(movieData) {
     movies.push({
       imdbID: movie.imdbID,
       Title: movie.Title,
-      Poster: movie.Poster
+      Poster: movie.Poster,
+      // Boolean to hide favorite button after clicked.
+      // Note: it would be nice to already set favorite to true if the user
+      // has already favorited it. We would have to look up the favorites and
+      // compare that list to each movie.
+      favorite: false
     });
   });
 }
@@ -113,11 +119,20 @@ function displayMovies() {
   var html ="";
   // We will iterate through each movie and added to the existing HTML.
   var ii;
+  var idFavorite;
   for(ii =0; ii<movies.length; ii++) {
-    html += "<div id='" + movies[ii].imdbID + "' class='movie'>" +
-      "<img src='" + movies[ii].Poster + "' class='movie-img'/>" +
-      movies[ii].Title +
-    "</div>";
+    idFavorite = movies[ii].imdbID + 'Favorite';
+    html += "<div class='movie'>" +
+      "<div id='" + movies[ii].imdbID + "' >" +
+        "<img src='" + movies[ii].Poster + "' class='movie-img'/>" +
+        movies[ii].Title +
+      "</div>" ;
+    if(!movies[ii].favorite) {
+      html += "<button id='" + idFavorite + "' class='movie-favorite'>" +
+        "Favorite" +
+      "</button>";
+    }
+    html += "</div>";
   }
 
   // The HTML element has an id of 'movieResults' so we hardcode that here.
@@ -134,6 +149,13 @@ function displayMovies() {
       eleById(movies[ii].imdbID).onclick =function() {
         getMovieDetails(movies[ii].imdbID);
       };
+      // Add click handler for favorite too.
+      if(!movies[ii].favorite) {
+        idFavorite = movies[ii].imdbID + 'Favorite';
+        eleById(idFavorite).onclick =function() {
+          saveMovieFavorite(movies[ii]);
+        };
+      }
     })(ii);
   }
 }
@@ -155,7 +177,7 @@ function getMovieDetails(movieId) {
 
   // Use helper AJAX function to look up movie details
   var url ="http://www.omdbapi.com/?i=" + movieId + "&type=movie&r=json&tomatoes=true&";
-  ajax(url, "GET", function(response) {
+  ajax(url, "GET", null, function(response) {
     // Now we have movie details, so update HTML.
     displayMovieDetails(response);
   });
@@ -171,4 +193,30 @@ function displayMovieDetails(info) {
     html += "<div>" + key + ": " + info[key] + "</div>";
   }
   eleById('movieDetails').innerHTML =html;
+}
+
+function saveMovieFavorite(movie) {
+  // This time we call our own backend, so no `http://` in front.
+  var url ="/favorites";
+  var data ="imdbID=" + movie.imdbID + "&Title=" + movie.Title + "&Poster=" + movie.Poster;
+  ajax(url, "POST", data, function(response) {
+    // Mark this movie as favorited and then re-display movies.
+    var index =getMovieIndexById(movie.imdbID);
+    if(index > -1) {
+      movies[index].favorite =true;
+      displayMovies();
+    }
+  });
+}
+
+function getMovieIndexById(movieId) {
+  var ii;
+  for(ii =0; ii<movies.length; ii++) {
+    // Convert both to strings in case one is not.
+    if(movies[ii].imdbID.toString() === movieId.toString()) {
+      return ii;
+    }
+  }
+  // If not found, return -1, which is not a valid index.
+  return -1;
 }
