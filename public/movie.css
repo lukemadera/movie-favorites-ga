@@ -10,6 +10,9 @@
   font-size: 20px;
   text-align: center;
 }
+.movie-search-note {
+  margin: 5px;
+}
 .movie-search-button {
   font-size: 20px;
   padding: 10px;

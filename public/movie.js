@@ -48,6 +48,11 @@ function initEvents() {
   };
 }
 
+/**
+Search for movies by making an AJAX call to the http://www.omdbapi.com/ API.
+Note: this currently does not handle paging; it will just return the first 10
+ movies.
+*/
 function searchMovies(searchText) {
   // If empty search, do not search at all, just empty out the movies list.
   if(!searchText || searchText.length <1) {
