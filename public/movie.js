@@ -24,13 +24,27 @@ function init() {
 }
 
 function initEvents() {
-  // Set up click handler for movie search button.
-  eleById('movieSearchButton').onclick =function() {
+  // Set up click handler for movie search button and input `enter` key press.
+  // Use a function since we'll do the same thing for both event handlers.
+  var searchMoviesHandler =function() {
     var searchInput =eleById('movieSearchInput');
     // To get the text the user typed in an input, get the input element and
     // then use `.value`.
     var searchText =searchInput.value;
     searchMovies(searchText);
+  };
+
+  // If click button, search.
+  eleById('movieSearchButton').onclick =function() {
+    searchMoviesHandler();
+  };
+  // If hit 'Enter' key on keyboard when in input, search.
+  eleById('movieSearchInput').onkeyup =function(evt) {
+    // The key code for enter is `13`
+    // http://www.cambiaresearch.com/articles/15/javascript-key-codes
+    if(evt.keyCode ===13) {
+      searchMoviesHandler();
+    }
   };
 }
 
@@ -38,7 +52,10 @@ function searchMovies(searchText) {
   // If empty search, do not search at all, just empty out the movies list.
   if(!searchText || searchText.length <1) {
     movies =[];
+    displayMovies();
+    return;
   }
+
   // Use the OMDb API to look up movies (by title)
   var url ="http://www.omdbapi.com/";
   // Append the search term.
@@ -66,7 +83,6 @@ Takes movie data from http://www.omdbapi.com/ and re-formats it how we want it
  in our `movies` array of objects.
 */
 function setMovies(movieData) {
-  console.log(movieData);
   // First blank out the movies.
   movies =[];
 
@@ -82,8 +98,6 @@ function setMovies(movieData) {
       Poster: movie.Poster
     });
   });
-
-  console.log(movies);
 }
 
 /**
