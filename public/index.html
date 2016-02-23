@@ -4,6 +4,30 @@
   <title>Movies With Favorites</title>
 </head>
 <body>
-  body content goes here.
+
+  <script type="text/javascript" src="movie.js"></script>
+
+  <!-- Input to search for movies -->
+  <div>
+    <div>
+      <input type='text' id='movieSearchInput' />
+    </div>
+    <div>
+      <button id='movieSearchButton'>Search Movies</button>
+    </div>
+  </div>
+
+  <!-- A div element the movies HTML will be stuffed into. -->
+  <div id='movieResults'>
+  </div>
+
+
+<!-- http://stackoverflow.com/questions/9899372/pure-javascript-equivalent-to-jquerys-ready-how-to-call-a-function-when-the -->
+<script>
+// self executing function here
+(function() {
+  init();
+})();
+</script>
 </body>
 </html>
