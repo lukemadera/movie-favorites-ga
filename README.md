@@ -1,7 +1,7 @@
 ## Completed Version
 
 - Github: https://github.com/lukemadera/movie-favorites-ga
-- Heroku Live App: http://movie-favorites-ga.herokuapp.com/my-favorites
+- Heroku Live App: http://movie-favorites-ga.herokuapp.com
 
 ### Instructions
 
