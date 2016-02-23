@@ -8,8 +8,6 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// app.use('/', express.static(path.join(__dirname, 'public'));
-
 // Get favorites (from JSON file).
 app.get('/favorites', function(req, res) {
   var data = fs.readFileSync('./data.json');
@@ -29,6 +27,11 @@ app.post('/favorites', function(req, res) {
   fs.writeFile('./data.json', JSON.stringify(data));
   res.setHeader('Content-Type', 'application/json');
   res.send(data);
+});
+
+//catch all route to serve index.html (main frontend app)
+app.get('*', function(req, res){
+  res.sendFile('/index.html');
 });
 
 app.listen(3000, function() {
