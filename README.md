@@ -1,3 +1,18 @@
+## Completed Version
+
+- Github: https://github.com/lukemadera/movie-favorites-ga
+- Heroku Live App: http://movie-favorites-ga.herokuapp.com/my-favorites
+
+### Instructions
+
+- Clone from Github
+- `cd` into cloned directory
+- `npm install`
+- `npm start` (or `node server.js`)
+- Open a browser (e.g. Chrome) to `http://localhost:3000`
+
+
+
 ![GA Logo](https://raw.github.com/generalassembly/ga-ruby-on-rails-for-devs/master/images/ga.png)
 
 ## WDI Instructor Code Challenge
