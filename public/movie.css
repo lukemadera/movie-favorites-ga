@@ -12,6 +12,7 @@
 }
 .movie-search-note {
   margin: 5px;
+  text-align: center;
 }
 .movie-search-button {
   font-size: 20px;
@@ -22,12 +23,17 @@
   text-align: center;
 }
 .movie {
-  max-width: 250px;
+  max-width: 100px;
   display: inline-block;
   vertical-align: bottom;
   margin: 10px;
   text-align: center;
+  cursor: pointer;
 }
 .movie-img {
   width: 100%;
+}
+
+.movie-details {
+  text-align: center;
 }

@@ -124,4 +124,41 @@ function displayMovies() {
   // We will update ALL the content for the element with our newly formed
   // string of HTML that has all the movies.
   eleById('movieResults').innerHTML =html;
+
+  // Add click handlers
+  for(ii =0; ii<movies.length; ii++) {
+    //need closure inside for loop
+    (function(ii) {
+      eleById(movies[ii].imdbID).onclick =function() {
+        getMovieDetails(movies[ii].imdbID);
+      };
+    })(ii);
+  }
+}
+
+function getMovieDetails(movieId) {
+  var movie =null;
+  var ii;
+  for(ii =0; ii<movies.length; ii++) {
+    if(movieId ===movies[ii].imdbID) {
+      movie =movies[ii];
+      break;
+    }
+  }
+
+  // Use helper AJAX function to look up movie details
+  var url ="http://www.omdbapi.com/?i=" + movieId + "&type=movie&r=json&tomatoes=true&";
+  ajax(url, "GET", function(response) {
+    // Now we have movie details, so update HTML.
+    displayMovieDetails(response);
+  });
+}
+
+function displayMovieDetails(info) {
+  var html ="";
+  var key;
+  for(key in info) {
+    html += "<div>" + key + ": " + info[key] + "</div>";
+  }
+  eleById('movieDetails').innerHTML =html;
 }
