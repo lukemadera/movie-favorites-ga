@@ -1,0 +1,12 @@
+.movies {
+  text-align: center;
+}
+.movie {
+  max-width: 250px;
+  display: inline-block;
+  margin: 10px;
+  text-align: center;
+}
+.movie-img {
+  width: 100%;
+}
