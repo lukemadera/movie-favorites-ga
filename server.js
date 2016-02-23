@@ -10,7 +10,11 @@ app.use(bodyParser.json());
 
 // Get favorites (from JSON file).
 app.get('/favorites', function(req, res) {
-  var data = fs.readFileSync('./data.json');
+  var filePath ='./data.json';
+  var data =[];
+  if(fs.existsSync(filePath)) {
+    data = fs.readFileSync(filePath);
+  }
   res.setHeader('Content-Type', 'application/json');
   res.send(data);
 });
@@ -28,7 +32,13 @@ app.post('/favorites', function(req, res) {
   }
   var body =req.body;
   
-  var data = JSON.parse(fs.readFileSync('./data.json'));
+  var filePath ='./data.json';
+  // Start as string to match json file format.
+  var data ="[]";
+  if(fs.existsSync(filePath)) {
+    data = fs.readFileSync(filePath);
+  }
+  data = JSON.parse(data);
 
   // Check if favorite already exists.
   // var exists =false;
