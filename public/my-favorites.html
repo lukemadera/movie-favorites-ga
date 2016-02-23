@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movies With Favorites</title>
+
+  <link rel="stylesheet" href="my-favorites.css"/>
+  <link rel="stylesheet" href="movie.css"/>
+</head>
+<body>
+
+  <script type="text/javascript" src="helpers.js"></script>
+  <script type="text/javascript" src="movie.js"></script>
+  <script type="text/javascript" src="favorites.js"></script>
+
+  <h1 class='favorites-header'>Favorites</h1>
+  <div class='movie-search-note'><a href='/index'>Back to Search</a></div>
+
+  <!-- A div element the movies HTML will be stuffed into. -->
+  <div id='favoritesResults' class='movies'>
+  </div>
+
+<!-- http://stackoverflow.com/questions/9899372/pure-javascript-equivalent-to-jquerys-ready-how-to-call-a-function-when-the -->
+<script>
+// self executing function here
+(function() {
+  initFavorites();
+})();
+</script>
+</body>
+</html>

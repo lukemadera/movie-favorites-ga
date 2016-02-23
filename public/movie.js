@@ -20,7 +20,7 @@ Initialization function that should only be run AFTER the window has loaded
  and the elements are on the page. Otherwise the event handler binding will
  fail as they do not exist yet!
 */
-function init() {
+function initMovies() {
   initEvents();
 }
 
@@ -58,7 +58,8 @@ function searchMovies(searchText) {
   // If empty search, do not search at all, just empty out the movies list.
   if(!searchText || searchText.length <1) {
     movies =[];
-    displayMovies();
+    // The HTML element has an id of 'movieResults' so we hardcode that here.
+    displayMovies(movies, true, true, 'movieResults');
     return;
   }
 
@@ -80,7 +81,8 @@ function searchMovies(searchText) {
     // Now we have new movies, so update our local `movies` variable.
     setMovies(response);
     // Now that we have added in the new movie data, display them.
-    displayMovies();
+    // The HTML element has an id of 'movieResults' so we hardcode that here.
+    displayMovies(movies, true, true, 'movieResults');
   });
 }
 
@@ -114,20 +116,20 @@ function setMovies(movieData) {
 /**
 Render the movies stored in the `movies` array
 */
-function displayMovies() {
+function displayMovies(moviesData, showFavorite, showDetails, elementId) {
   // Start with empty HTML.
   var html ="";
   // We will iterate through each movie and added to the existing HTML.
   var ii;
   var idFavorite;
-  for(ii =0; ii<movies.length; ii++) {
-    idFavorite = movies[ii].imdbID + 'Favorite';
+  for(ii =0; ii<moviesData.length; ii++) {
+    idFavorite = moviesData[ii].imdbID + 'Favorite';
     html += "<div class='movie'>" +
-      "<div id='" + movies[ii].imdbID + "' >" +
-        "<img src='" + movies[ii].Poster + "' class='movie-img'/>" +
-        movies[ii].Title +
+      "<div id='" + moviesData[ii].imdbID + "' >" +
+        "<img src='" + moviesData[ii].Poster + "' class='movie-img'/>" +
+        moviesData[ii].Title +
       "</div>" ;
-    if(!movies[ii].favorite) {
+    if(showFavorite && !moviesData[ii].favorite) {
       html += "<button id='" + idFavorite + "' class='movie-favorite'>" +
         "Favorite" +
       "</button>";
@@ -135,25 +137,27 @@ function displayMovies() {
     html += "</div>";
   }
 
-  // The HTML element has an id of 'movieResults' so we hardcode that here.
   // We will update ALL the content for the element with our newly formed
   // string of HTML that has all the movies.
-  eleById('movieResults').innerHTML =html;
+  eleById(elementId).innerHTML =html;
 
   // Add click handlers
-  for(ii =0; ii<movies.length; ii++) {
+  for(ii =0; ii<moviesData.length; ii++) {
     // Need closure inside for loop, otherwise the `ii` reference will not be
     // accurate for each iteration of the loop.
     (function(ii) {
-      // We use the id that we set above - `movies[ii].imdbID`
-      eleById(movies[ii].imdbID).onclick =function() {
-        getMovieDetails(movies[ii].imdbID);
-      };
+      if(showDetails) {
+        // We use the id that we set above - `moviesData[ii].imdbID`
+        eleById(moviesData[ii].imdbID).onclick =function() {
+          getMovieDetails(moviesData[ii].imdbID);
+        };
+      }
+
       // Add click handler for favorite too.
-      if(!movies[ii].favorite) {
-        idFavorite = movies[ii].imdbID + 'Favorite';
+      if(showFavorite && !moviesData[ii].favorite) {
+        idFavorite = moviesData[ii].imdbID + 'Favorite';
         eleById(idFavorite).onclick =function() {
-          saveMovieFavorite(movies[ii]);
+          saveMovieFavorite(moviesData[ii]);
         };
       }
     })(ii);
@@ -204,7 +208,8 @@ function saveMovieFavorite(movie) {
     var index =getMovieIndexById(movie.imdbID);
     if(index > -1) {
       movies[index].favorite =true;
-      displayMovies();
+      // The HTML element has an id of 'movieResults' so we hardcode that here.
+      displayMovies(movies, true, true, 'movieResults');
     }
   });
 }

@@ -15,6 +15,11 @@ app.get('/favorites', function(req, res) {
   res.send(data);
 });
 
+app.get('/my-favorites', function(req, res) {
+  // Need to get the absolute path from this directory.
+  res.sendFile(__dirname + '/public/my-favorites.html');
+});
+
 // Update favorites by inserting a new one.
 app.post('/favorites', function(req, res) {
   if(!req.body.imdbID || !req.body.Title) {
@@ -43,8 +48,9 @@ app.post('/favorites', function(req, res) {
 });
 
 //catch all route to serve index.html (main frontend app)
-app.get('*', function(req, res){
-  res.sendFile('/index.html');
+app.get('*', function(req, res) {
+  // Need to get the absolute path from this directory.
+  res.sendFile(__dirname + '/public/index.html');
 });
 
 app.listen(3000, function() {
